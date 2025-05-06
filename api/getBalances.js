@@ -3,7 +3,7 @@ const { ethers } = require("ethers");
 const RPC_URL = "https://rpc.ankr.com/somnia_testnet/6e3fd81558cf77b928b06b38e9409b4677b637118114e83364486294d5ff4811";
 const provider = new ethers.JsonRpcProvider(RPC_URL);
 
-// Map variable names to contract addresses
+// Contract addresses mapped to descriptive variable names
 const contractMap = {
   rpsPurch: "0xD1fC78e743B06F90E2B6A36022763d3E35160E0a",
   rpsScore: "0x89cD2e2124b48737A220b7cA264b12a461e225d3",
@@ -14,7 +14,17 @@ const contractMap = {
   petScoreTotal: "0x754F014dFC79eE5b3bd4335637622Ce03f26bBd9"
 };
 
-// Standard ABI just for `balanceOf`
+// Completion conditions for each key
+const completionThresholds = {
+  rpsPurch: 1000,
+  rpsScore: 2500,
+  rpsScoreTotal: 26000,
+  snkA: 10,
+  snkScore: 3500,
+  petScore: 700,
+  petScoreTotal: 7000
+};
+
 const ABI = ["function balanceOf(address) view returns (uint256)"];
 
 module.exports = async (req, res) => {
@@ -24,20 +34,32 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: "Invalid wallet address" });
   }
 
-  const balances = {};
+  const data = {};
 
-  for (const [name, contractAddress] of Object.entries(contractMap)) {
+  for (const [key, contractAddress] of Object.entries(contractMap)) {
     try {
       const contract = new ethers.Contract(contractAddress, ABI, provider);
-      const balance = await contract.balanceOf(address);
-      balances[name] = parseFloat(ethers.formatUnits(balance, 18)); // assuming 18 decimals
+      const balanceBN = await contract.balanceOf(address);
+      const balance = parseFloat(ethers.formatUnits(balanceBN, 18)); // assuming 18 decimals
+
+      const threshold = completionThresholds[key];
+      const completed = typeof threshold === "number" ? balance > threshold : null;
+
+      data[key] = {
+        balance,
+        completed
+      };
     } catch (error) {
-      balances[name] = `Error: ${error.message}`;
+      data[key] = {
+        balance: null,
+        completed: false,
+        error: error.message
+      };
     }
   }
 
   res.status(200).json({
     wallet: address,
-    balances
+    data
   });
 };
