@@ -3,7 +3,7 @@ const { ethers } = require("ethers");
 const RPC_URL = "https://rpc.ankr.com/somnia_testnet/6e3fd81558cf77b928b06b38e9409b4677b637118114e83364486294d5ff4811"; // 👈 Replace with actual RPC
 
 const CONTRACT_ADDRESSES = [
-  "0x0000000000000000000000000000000000000000"
+  "0x878bf527Abe53f973c5f43eB171c6111d76A0FC5"
 ];
 
 const ERC20_ABI = [
