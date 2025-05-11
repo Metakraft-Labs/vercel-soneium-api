@@ -7,7 +7,6 @@ const provider = new ethers.JsonRpcProvider(RPC_URL);
 const contractMap = {
   purchasedpoint: "0x155a0d960E76909905446118499Df6E0D0123122",
   claimedpoints: "0xeb9415D0B989B18231E6977819c24DEF47c855A8",
-  snakeclaims: "0x0F733EF4fB81ccEE6C091aB20175811ed220e07B",
 };
 
 // Completion conditions for each Call
