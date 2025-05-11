@@ -14,7 +14,6 @@ const contractMap = {
 const completionThresholds = {
   purchasedpoint: 1000,
   claimedpoints: 7500,
-  snakeclaims: 10000,
 };
 
 const ABI = ["function balanceOf(address) view returns (uint256)"];
