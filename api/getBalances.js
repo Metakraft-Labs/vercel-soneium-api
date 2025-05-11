@@ -7,14 +7,13 @@ const provider = new ethers.JsonRpcProvider(RPC_URL);
 const contractMap = {
   purchasedpoint: "0x155a0d960E76909905446118499Df6E0D0123122",
   claimedpoints: "0xeb9415D0B989B18231E6977819c24DEF47c855A8",
-  snakeclaims: "0x0F733EF4fB81ccEE6C091aB20175811ed220e07B",
 };
 
 // Completion conditions for each Call
 const completionThresholds = {
   purchasedpoint: 1000,
   claimedpoints: 7500,
-  snakeclaims: 10000,
+  snakeclaims: 0,
 };
 
 const ABI = ["function balanceOf(address) view returns (uint256)"];
@@ -49,6 +48,15 @@ module.exports = async (req, res) => {
       };
     }
   }
+
+   // Add snakeclaims entry based on the sum of purchasedpoint + claimedpoints
+  const snakeThreshold = completionThresholds.snakeclaims;
+  const snakeCompleted = totalSnakePoints > snakeThreshold;
+
+  data["snakeclaims"] = {
+    balance: totalSnakePoints,
+    completed: snakeCompleted
+  };
 
   res.status(200).json({
     wallet: address,
