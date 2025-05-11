@@ -54,5 +54,6 @@ module.exports = async (req, res) => {
   res.status(200).json({
     wallet: address,
     data
+    totalPoints: parseFloat(totalPoints.toFixed(2))
   });
 };
