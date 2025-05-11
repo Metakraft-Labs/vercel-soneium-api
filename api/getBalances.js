@@ -13,7 +13,7 @@ const contractMap = {
 // Completion conditions for each Call
 const completionThresholds = {
   purchasedpoint: 1000,
-  claimedpoints: 25000,
+  claimedpoints: 7500,
   snakeclaims: 10000,
 };
 
