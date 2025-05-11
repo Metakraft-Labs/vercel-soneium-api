@@ -25,6 +25,7 @@ module.exports = async (req, res) => {
   }
 
   const data = {};
+  let totalPoints = 0;
 
   for (const [key, contractAddress] of Object.entries(contractMap)) {
     try {
@@ -39,6 +40,8 @@ module.exports = async (req, res) => {
         balance,
         completed
       };
+
+       totalPoints += balance;
     } catch (error) {
       data[key] = {
         balance: null,
